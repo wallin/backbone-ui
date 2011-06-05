@@ -1,9 +1,21 @@
-<!DOCTYPE html>  <html> <head>   <title>backbone-ui.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               backbone-ui.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h1>Backbone-UI</h1>
+<!DOCTYPE html>  <html> <head>   <title>backbone-ui.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               backbone-ui.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <pre><code>backbone-ui.js 0.1.0a
+by Sebastian Wallin (sebastian@popdevelop.com)
+</code></pre>
 
-<p>by Sebastian Wallin (sebastian@popdevelop.com)</p>
+<h3>What is this?</h3>
 
-<p>A small collection of backbone components for creating structured UI
-layouts. Needs <code>Backbone</code> and <code>jQuery</code> to work</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">$</span><span class="p">,</span> <span class="nx">ns</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Create namespace if needed</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">ns</span> <span class="o">=</span> <span class="nb">window</span><span class="p">[</span><span class="nx">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">window</span><span class="p">[</span><span class="nx">ns</span><span class="p">]</span> <span class="o">||</span> <span class="p">{});</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h2>ContainerView</h2>
+<p><strong>Backbone-ui</strong> is an attempt to create small collection of backbone
+components for creating structured UI layouts. Needs <code>Backbone</code> and <code>jQuery</code>
+to work</p>
+
+<h3>Components:</h3>
+
+<ul>
+<li><strong>ContainerView</strong>: Basic type for grouping many views together</li>
+<li><strong>SuperView</strong>: Extends <strong>ContainerView</strong> but will only display one of the views at a time</li>
+<li><strong>PopupView</strong></li>
+<li><strong>TabController</strong></li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h1>Components</h1>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">$</span><span class="p">,</span> <span class="nx">ns</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Create namespace if needed</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">ns</span> <span class="o">=</span> <span class="nb">window</span><span class="p">[</span><span class="nx">ns</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">window</span><span class="p">[</span><span class="nx">ns</span><span class="p">]</span> <span class="o">||</span> <span class="p">{});</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h2>ContainerView</h2>
 
 <p>A view containing additional simultaneous views.  Provides an option
 <code>hideOnAdd</code> which will hide view elements by default when added. If this
@@ -23,32 +35,14 @@ or no view in the container becomes selected</p>             </td>             <
       <span class="k">this</span><span class="p">.</span><span class="nx">views</span> <span class="o">=</span> <span class="p">{};</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">selected</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
-      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
       <span class="p">}</span>
 
       <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">selectView</span><span class="p">);</span>
-    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Adds a named view to the view store.  Will also add it to the DOM if no
-view element provided. A side effect is that the views <code>el</code> will be
-turned into a jQuery element</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">addView</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">name</span> <span class="o">||</span> <span class="o">!</span><span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="s1">&#39;Cannot add view without name or data&#39;</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="nx">opts</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">||</span> <span class="p">{};</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <h3>"Internal" methods</h3>
 
-      <span class="nx">view</span><span class="p">.</span><span class="nx">el</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hideOnAdd</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
-      <span class="p">}</span>
-
-      <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">view</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Append view to container if nonexistant</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">cls</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">className</span> <span class="o">||</span> <span class="s1">&#39;ui-view&#39;</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">cls</span><span class="p">));</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">},</span>
-
-    <span class="nx">removeSingle</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+<p>Removes a single named view from store and DOM</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">removeSingle</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">try</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">el</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
         <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
@@ -57,29 +51,7 @@ turned into a jQuery element</p>             </td>             <td class="code">
         <span class="p">}</span>
       <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Removes a view from view store and DOM.  Removes all views if no <code>name</code>
-is specified</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">removeView</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">),</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">removeSingle</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
-        <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">else</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">removeSingle</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>Returns name of the view currently set</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getView</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">selected</span><span class="p">;</span>
-    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>Get title for a specific view name. If name is omitted current view will
-be used (if set)</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getTitle</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">name</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">selected</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">selected</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">name</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">el</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;view-title&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="nx">name</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>Distributes <code>select</code> event to correct view. Will trigger <code>unselect</code> event
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Distributes <code>select</code> event to correct view. Will trigger <code>unselect</code> event
 to any currently selected view</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">selectView</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">selected</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">selected</span> <span class="o">!==</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">selected</span><span class="p">].</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;unselect&#39;</span><span class="p">);</span>
@@ -90,13 +62,64 @@ to any currently selected view</p>             </td>             <td class="code
         <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="k">this</span><span class="p">.</span><span class="nx">selected</span><span class="p">].</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">);</span>
       <span class="p">}</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h2>Superview</h2>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h3>Methods</h3>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h4>addView</h4>
 
-<p>A superview that can contain a number of subviews.  A single view can only
-be visible at a time (since option <code>hideOnAdd</code> is set to true by
-default). If this view is subclassed <code>init</code> will be called with same
-arguments as initialize.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">ns</span><span class="p">.</span><span class="nx">SuperView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">ContainerView</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+<p>Adds a named view to the view store.  Will also add it to the DOM if no
+view element provided. A side effect is that the views <code>el</code> will be
+turned into a jQuery element if not already of that type</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">addView</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">view</span><span class="p">,</span> <span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">name</span> <span class="o">||</span> <span class="o">!</span><span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="s1">&#39;Cannot add view without name or data&#39;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">opts</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">||</span> <span class="p">{};</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span> <span class="k">instanceof</span> <span class="nx">$</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">view</span><span class="p">.</span><span class="nx">el</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hideOnAdd</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+      <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>Remove existing view with the same name</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">removeSingle</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">view</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>Append view to container if nonexistant</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">cls</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">className</span> <span class="o">||</span> <span class="s1">&#39;ui-view&#39;</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">view</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">cls</span><span class="p">));</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h4>removeView</h4>
+
+<p>Removes a view from view store and DOM.  Removes all views if no <code>name</code>
+is specified</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">removeView</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">_</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">),</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">removeSingle</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">removeSingle</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <h4>getView</h4>
+
+<p>Returns name of the view currently set</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getView</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">selected</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h4>getTitle</h4>
+
+<p>Get title for a specific view name. If name is omitted current view will
+be used (if set). Title is fetched from the <code>data-view-title</code> attribute.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getTitle</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">name</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">selected</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">name</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">selected</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">name</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">[</span><span class="nx">name</span><span class="p">].</span><span class="nx">el</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;view-title&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="nx">name</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h2>Superview</h2>
+
+<p>A superview extends a <strong>ContainerView</strong> and contain a number of subviews.
+A single view can only be visible at a time (since option <code>hideOnAdd</code> is
+set to true by default). If this view is subclassed <code>init</code> will be called
+with same arguments as initialize.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">ns</span><span class="p">.</span><span class="nx">SuperView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">ContainerView</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
     <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="nx">_</span><span class="p">.</span><span class="nx">bindAll</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;setView&#39;</span><span class="p">);</span>
 
@@ -105,10 +128,10 @@ arguments as initialize.</p>             </td>             <td class="code">    
 
       <span class="k">this</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">setView</span><span class="p">);</span>
 
-      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
       <span class="p">}</span>
-    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p>Displays a view with the specified <code>name</code>. Throws an exception if the view
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p>Displays a view with the specified <code>name</code>. Throws an exception if the view
 cannot be found in the view store.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">setView</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">name</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nx">views</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">selected</span><span class="p">)</span> <span class="p">{</span>
@@ -126,9 +149,13 @@ cannot be found in the view store.</p>             </td>             <td class="
       <span class="p">}</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
-  <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <h2>PopupView</h2>
+  <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <h2>PopupView</h2>
 
-<p>Provides a popup with close button</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">ns</span><span class="p">.</span><span class="nx">PopupView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+<p>Provides a view used for popups. Will add a shade layer with class
+<code>ui-popup-shade</code>, a content div with class <code>ui-popup-content</code> and a close
+button with class <code>ui-popup-close</code>. A custom close-hook can be provided via
+the <code>onClose</code> parameter. This method will be called when the user clicks the
+close button</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">ns</span><span class="p">.</span><span class="nx">PopupView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
     <span class="nx">tagName</span><span class="o">:</span> <span class="s1">&#39;div&#39;</span><span class="p">,</span>
 
     <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;ui-popup&#39;</span><span class="p">,</span>
@@ -139,32 +166,24 @@ cannot be found in the view store.</p>             </td>             <td class="
 
     <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="nx">_</span><span class="p">.</span><span class="nx">bindAll</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;setContent&#39;</span><span class="p">,</span> <span class="s1">&#39;show&#39;</span><span class="p">,</span> <span class="s1">&#39;hide&#39;</span><span class="p">,</span> <span class="s1">&#39;close&#39;</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
       <span class="p">}</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;ui-popup-shade&quot;&gt;&#39;</span><span class="p">);</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">content</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;ui-popup-content&quot;&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">);</span>
-    <span class="p">},</span>
-
-    <span class="nx">setContent</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <h3>Methods</h3>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <h4>setContent</h4>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">setContent</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">content</span>
         <span class="p">.</span><span class="nx">empty</span><span class="p">()</span>
         <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;a class=&quot;ui-popup-close&quot;&gt;Close&lt;/a&gt;&#39;</span><span class="p">)</span>
         <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">},</span>
-
-    <span class="nx">show</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <h4>show</h4>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">show</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">},</span>
-
-    <span class="nx">hide</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <h4>hide</h4>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">hide</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">},</span>
-
-    <span class="nx">close</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <h4>close</h4>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">close</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">onClose</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">onClose</span><span class="p">();</span>
       <span class="p">}</span>
@@ -173,12 +192,12 @@ cannot be found in the view store.</p>             </td>             <td class="
       <span class="p">}</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
-  <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h2>TabController</h2>
+  <span class="p">});</span></pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <h2>TabController</h2>
 
-<p>Automatically generate tabs for controlling a superview.  Needs an <code>el</code> to
-work with. Links will also be generated with <code>href</code> set to <code>name</code> plus a
-<code>prefix</code> specified in <code>opts</code>. Also provides an option for a custom
-<code>template</code> for rendering each element</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">ns</span><span class="p">.</span><span class="nx">TabController</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+<p>Automatically generate tabs from a <strong>ContainerView</strong>. Links will also be
+generated with <code>href</code> set to <code>name</code> plus a <code>prefix</code> specified in
+<code>opts</code>. Also provides an option for a custom <code>template</code> for rendering each
+tab</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">ns</span><span class="p">.</span><span class="nx">TabController</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
     <span class="nx">tagName</span><span class="o">:</span> <span class="s1">&#39;ul&#39;</span><span class="p">,</span>
 
     <span class="nx">className</span><span class="o">:</span> <span class="s1">&#39;ui-tab&#39;</span><span class="p">,</span>
@@ -188,16 +207,16 @@ work with. Links will also be generated with <code>href</code> set to <code>name
     <span class="nx">view</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 
     <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">opts</span><span class="p">.</span><span class="nx">view</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">view</span> <span class="k">instanceof</span> <span class="nx">ns</span><span class="p">.</span><span class="nx">ContainerView</span><span class="p">))</span> <span class="p">{</span>
         <span class="k">throw</span> <span class="s1">&#39;No view for tab control&#39;</span><span class="p">;</span>
       <span class="p">}</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">view</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">view</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">prefix</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">prefix</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">template</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">template</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">;</span>
-      <span class="nx">_</span><span class="p">.</span><span class="nx">bindAll</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;render&#39;</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <p>Re-render when selected view changes.
+      <span class="nx">_</span><span class="p">.</span><span class="nx">bindAll</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;render&#39;</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <p>Re-render when selected view changes.
 Used when view in superview is set programmatically</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">);</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
-    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p>Generate tabs for all views. CSS classes with the views name
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <p>Generate tabs for all views. CSS classes with the views name
 and selected state will be added</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
       <span class="kd">var</span> <span class="nx">selected</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">getView</span><span class="p">();</span>
@@ -207,7 +226,7 @@ and selected state will be added</p>             </td>             <td class="co
             <span class="nx">className</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nx">i</span><span class="p">,</span>
             <span class="nx">name</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">prefix</span> <span class="o">+</span> <span class="nx">i</span><span class="p">,</span>
             <span class="nx">title</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">getTitle</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
-          <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <p>Indicate whether item matches currently active view</p>             </td>             <td class="code">               <div class="highlight"><pre>          <span class="nx">data</span><span class="p">.</span><span class="nx">className</span> <span class="o">+=</span> <span class="nx">i</span> <span class="o">===</span> <span class="nx">selected</span> <span class="o">?</span> <span class="s1">&#39; selected&#39;</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+          <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-25">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-25">&#182;</a>               </div>               <p>Indicate whether item matches currently active view</p>             </td>             <td class="code">               <div class="highlight"><pre>          <span class="nx">data</span><span class="p">.</span><span class="nx">className</span> <span class="o">+=</span> <span class="nx">i</span> <span class="o">===</span> <span class="nx">selected</span> <span class="o">?</span> <span class="s1">&#39; selected&#39;</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
           <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">template</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
         <span class="p">}</span>
       <span class="p">}</span>
