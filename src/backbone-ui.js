@@ -247,13 +247,17 @@
   // Automatically generate tabs from a **ContainerView**. Links will also be
   // generated with `href` set to `name` plus a `prefix` specified in
   // `opts`. Also provides an option for a custom `template` for rendering each
-  // tab
+  // tab.
   ns.TabController = Backbone.View.extend({
     tagName: 'ul',
 
     className: 'ui-tab',
 
-    template: _.template('<li class="<%=className%>"><a href="<%=name%>"><%=title%></a></li>'),
+    template: _.template('<li class="<%=className%>"><a href="<%=name%>" data-id="<%=id%>"><%=title%></a></li>'),
+
+    events: {
+      'click': 'clickHandler'
+    },
 
     view: false,
 
@@ -264,11 +268,22 @@
       this.view = opts.view;
       this.prefix = opts.prefix || '';
       this.template = opts.template || this.template;
-      _.bindAll(this, 'render');
+      this.onClick = _.isFunction(opts.onClick) ? opts.onClick : false;
+      _.bindAll(this, 'render', 'clickHandler');
       // Re-render when selected view changes.
       // Used when view in superview is set programmatically
       this.view.bind('change', this.render);
       this.render();
+    },
+
+    // A custom clickhandler can be provided via the `onClick` parameter. This
+    // function will be called with the name of the selected view as first
+    // parameter
+    clickHandler: function (e) {
+      var id = $(e.target).data('id');
+      if (this.onClick) {
+        return this.onClick.apply(this.view, [id, e]);
+      }
     },
 
     // Generate tabs for all views. CSS classes with the views name
@@ -279,6 +294,7 @@
       for (var i in this.view.views) {
         if (this.view.views.hasOwnProperty(i)) {
           var data = {
+            id: i,
             className: this.className + ' ' + i,
             name: this.prefix + i,
             title: this.view.getTitle(i)

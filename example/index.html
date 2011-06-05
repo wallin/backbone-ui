@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Backbone-ui example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <style type="text/css" media="screen">
+      body {
+        width: 480px;
+        margin: 2em auto;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #444;
+      }
+      a { color: #607890; }
+      #navigation {
+        height: 20px;
+      }
+      #navigation li {
+        list-style-type: none;
+        display: inline;
+        float: left;
+        margin-right: 1em;
+      }
+      #navigation li.selected {
+        background-color: #ddd;
+      }
+      #navigation li a {
+        display: inline-block;
+        padding: 0.7em 2em;
+      }
+      #container > div {
+        height: 300px;
+        background-color: #ddd;
+        padding: 2em;
+        text-align: center;
+      }
+    </style>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="http://documentcloud.github.com/backbone/backbone-min.js"></script>
+    <script type="text/javascript" src="https://github.com/wallin/backbone-ui/raw/master/src/backbone-ui.js"></script>
+  </head>
+  <body>
+    <ul id="navigation"></ul>
+    <div id="container">
+      <div id="first" data-view-title="First tab">
+        This is some content in the first view
+      </div>
+      <div id="second">
+        More content
+      </div>
+      <div id="third">
+        Even more!
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    // Create container
+    var container = new Backbone.SuperView({
+      el: $('#container')
+    });
+
+    // Add views
+    container.addView('first', new Backbone.View({
+      el: $('#first')
+    }));
+
+    container.addView('second', new Backbone.View({
+      el: $('#second')
+    }));
+
+    container.addView('third', new Backbone.View({
+      el: $('#third')
+    }));
+
+    // Create a controller
+    var nav = new Backbone.TabController({
+      view: container,
+      el: $('#navigation'),
+      onClick: function (name) {
+        container.setView(name);
+        return false;
+      }
+    });
+
+    // Set initial view
+    container.setView('first');
+  </script>
+</html>
