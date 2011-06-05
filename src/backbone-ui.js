@@ -1,23 +1,31 @@
-// # Backbone-UI
+//     backbone-ui.js 0.1.0a
+//     by Sebastian Wallin (sebastian@popdevelop.com)
 //
-// by Sebastian Wallin (sebastian@popdevelop.com)
+// ### What is this?
+// **Backbone-ui** is an attempt to create small collection of backbone
+// components for creating structured UI layouts. Needs `Backbone` and `jQuery`
+// to work
 //
-// A small collection of backbone components for creating structured UI
-// layouts. Needs `Backbone` and `jQuery` to work
+// ### Components:
 //
+// * **ContainerView**: Basic type for grouping many views together
+// * **SuperView**: Extends **ContainerView** but will only display one of the views at a time
+// * **PopupView**
+// * **TabController**
 
 
+// # Components #
 (function ($, ns) {
 
   // Create namespace if needed
   ns = window[ns] = (window[ns] || {});
 
-  // ## ContainerView ##
+  // ## ContainerView
   // A view containing additional simultaneous views.  Provides an option
   // `hideOnAdd` which will hide view elements by default when added. If this
   // view is subclassed `init` will be called with same arguments as initialize.
   //
-  // ### Events ###
+  // ### Events
   // The view listens for `select` event with a `viewname` argument which will
   // be propagated to a view with corresponding `viewname` if it exists.
   // Currently selected view will recieve an `unselect` event when another
@@ -31,37 +39,15 @@
       this.views = {};
       this.selected = false;
 
-      if (typeof(this.init) === 'function') {
+      if (_.isFunction(this.init)) {
         this.init.apply(this, arguments);
       }
 
       this.bind('select', this.selectView);
     },
 
-    // Adds a named view to the view store.  Will also add it to the DOM if no
-    // view element provided. A side effect is that the views `el` will be
-    // turned into a jQuery element
-    addView: function (name, view, opts) {
-      if (!name || !view) {
-        throw 'Cannot add view without name or data';
-      }
-      opts = opts || {};
-
-      view.el = $(view.el);
-      if (this.hideOnAdd) {
-        view.el.hide();
-      }
-
-      this.views[name] = view;
-
-      // Append view to container if nonexistant
-      if (view.id) {
-        var cls = opts.className || 'ui-view';
-        this.el.append(view.el.addClass(cls));
-      }
-      return this;
-    },
-
+    // ### "Internal" methods
+    // Removes a single named view from store and DOM
     removeSingle: function (name) {
       try {
         this.views[name].el.remove();
@@ -71,38 +57,6 @@
         }
       } catch (e) { }
       return this;
-    },
-
-    // Removes a view from view store and DOM.  Removes all views if no `name`
-    // is specified
-    removeView: function (name) {
-      if (!name) {
-        _.each(_.keys(this.views), function (i) {
-          this.removeSingle(i);
-        }, this);
-      }
-      else {
-        this.removeSingle(name);
-      }
-      return this;
-    },
-
-    // Returns name of the view currently set
-    getView: function () {
-      return this.selected;
-    },
-
-
-    // Get title for a specific view name. If name is omitted current view will
-    // be used (if set)
-    getTitle: function (name) {
-      if (typeof name === undefined && this.selected) {
-        name = this.selected;
-      }
-      if (name in this.views) {
-        return this.views[name].el.data('view-title') || name;
-      }
-      return '';
     },
 
     // Distributes `select` event to correct view. Will trigger `unselect` event
@@ -117,15 +71,83 @@
         this.views[this.selected].trigger('select');
       }
       return this;
+    },
+
+    // ### Methods
+
+    // #### addView
+    // Adds a named view to the view store.  Will also add it to the DOM if no
+    // view element provided. A side effect is that the views `el` will be
+    // turned into a jQuery element if not already of that type
+    addView: function (name, view, opts) {
+      if (!name || !view) {
+        throw 'Cannot add view without name or data';
+      }
+      opts = opts || {};
+
+      if (!(view.el instanceof $)) {
+        view.el = $(view.el);
+      }
+      if (this.hideOnAdd) {
+        view.el.hide();
+      }
+
+      // Remove existing view with the same name
+      if (this.views[name]) {
+        this.removeSingle(name);
+      }
+      this.views[name] = view;
+
+      // Append view to container if nonexistant
+      if (view.id) {
+        var cls = opts.className || 'ui-view';
+        this.el.append(view.el.addClass(cls));
+      }
+      return this;
+    },
+
+    // #### removeView
+    // Removes a view from view store and DOM.  Removes all views if no `name`
+    // is specified
+    removeView: function (name) {
+      if (!name) {
+        _.each(_.keys(this.views), function (i) {
+          this.removeSingle(i);
+        }, this);
+      }
+      else {
+        this.removeSingle(name);
+      }
+      return this;
+    },
+
+    // #### getView
+    // Returns name of the view currently set
+    getView: function () {
+      return this.selected;
+    },
+
+
+    // #### getTitle
+    // Get title for a specific view name. If name is omitted current view will
+    // be used (if set). Title is fetched from the `data-view-title` attribute.
+    getTitle: function (name) {
+      if (name == null && this.selected) {
+        name = this.selected;
+      }
+      if (name in this.views) {
+        return this.views[name].el.data('view-title') || name;
+      }
+      return '';
     }
   });
 
 
-  // ## Superview ##
-  // A superview that can contain a number of subviews.  A single view can only
-  // be visible at a time (since option `hideOnAdd` is set to true by
-  // default). If this view is subclassed `init` will be called with same
-  // arguments as initialize.
+  // ## Superview
+  // A superview extends a **ContainerView** and contain a number of subviews.
+  // A single view can only be visible at a time (since option `hideOnAdd` is
+  // set to true by default). If this view is subclassed `init` will be called
+  // with same arguments as initialize.
   ns.SuperView = Backbone.ContainerView.extend({
     initialize: function () {
       _.bindAll(this, 'setView');
@@ -135,7 +157,7 @@
 
       this.bind('select', this.setView);
 
-      if (typeof(this.init) === 'function') {
+      if (_.isFunction(this.init)) {
         this.init.apply(this, arguments);
       }
     },
@@ -162,8 +184,12 @@
   });
 
 
-  // ## PopupView ##
-  // Provides a popup with close button
+  // ## PopupView
+  // Provides a view used for popups. Will add a shade layer with class
+  // `ui-popup-shade`, a content div with class `ui-popup-content` and a close
+  // button with class `ui-popup-close`. A custom close-hook can be provided via
+  // the `onClose` parameter. This method will be called when the user clicks the
+  // close button
   ns.PopupView = Backbone.View.extend({
     tagName: 'div',
 
@@ -175,13 +201,16 @@
 
     initialize: function () {
       _.bindAll(this, 'setContent', 'show', 'hide', 'close');
-      if (typeof(this.init) === 'function') {
+      if (_.isFunction(this.init)) {
         this.init.apply(this, arguments);
       }
       this.el.append('<div class="ui-popup-shade">');
       this.content = $('<div class="ui-popup-content">').appendTo(this.el);
     },
 
+    // ### Methods
+
+    // #### setContent
     setContent: function (el) {
       this.content
         .empty()
@@ -190,16 +219,19 @@
       return this;
     },
 
+    // #### show
     show: function () {
       this.el.show();
       return this;
     },
 
+    // #### hide
     hide: function () {
       this.el.hide();
       return this;
     },
 
+    // #### close
     close: function () {
       if (_.isFunction(this.options.onClose)) {
         this.options.onClose();
@@ -211,11 +243,11 @@
     }
   });
 
-  // ## TabController ##
-  // Automatically generate tabs for controlling a superview.  Needs an `el` to
-  // work with. Links will also be generated with `href` set to `name` plus a
-  // `prefix` specified in `opts`. Also provides an option for a custom
-  // `template` for rendering each element
+  // ## TabController
+  // Automatically generate tabs from a **ContainerView**. Links will also be
+  // generated with `href` set to `name` plus a `prefix` specified in
+  // `opts`. Also provides an option for a custom `template` for rendering each
+  // tab
   ns.TabController = Backbone.View.extend({
     tagName: 'ul',
 
@@ -226,7 +258,7 @@
     view: false,
 
     initialize: function (opts) {
-      if (!opts.view) {
+      if (!(opts.view instanceof ns.ContainerView)) {
         throw 'No view for tab control';
       }
       this.view = opts.view;
