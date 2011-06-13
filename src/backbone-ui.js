@@ -35,7 +35,7 @@
       _.bindAll(this,
                 'addView', 'removeSingle', 'removeView',
                 'getView', 'getTitle', 'selectView');
-      this.hideOnAdd = this.options.hideOnAdd || false;
+      this.hideOnAdd = this.hideOnAdd || this.options.hideOnAdd || false;
       this.views = {};
       this.selected = false;
 
@@ -147,19 +147,20 @@
   // A superview extends a **ContainerView** and contain a number of subviews.
   // A single view can only be visible at a time (since option `hideOnAdd` is
   // set to true by default). If this view is subclassed `init` will be called
-  // with same arguments as initialize.
+  // with same arguments as initialize. `initialize` of **ContainerView** will
+  // also be called
   ns.SuperView = Backbone.ContainerView.extend({
     initialize: function () {
       _.bindAll(this, 'setView');
 
       this.hideOnAdd = this.options.hideOnAdd || true;
-      this.views = {};
 
       this.bind('select', this.setView);
 
-      if (_.isFunction(this.init)) {
-        this.init.apply(this, arguments);
-      }
+      ns.ContainerView.prototype.initialize.apply(this, arguments);
+
+      // Manually unbind `selectView` since we will call it manually
+      this.unbind('select', this.selectView);
     },
 
     // Displays a view with the specified `name`. Throws an exception if the view
@@ -196,7 +197,7 @@
     className: 'ui-popup',
 
     events: {
-      'click a.ui-popup-close': 'close'
+      'click a.ui-popup-close, div.ui-popup-shade': 'close'
     },
 
     initialize: function () {
