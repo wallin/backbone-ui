@@ -34,7 +34,7 @@
     initialize: function () {
       _.bindAll(this,
                 'addView', 'removeSingle', 'removeView',
-                'getView', 'getTitle', 'selectView');
+                'getView', 'getTitle', 'select');
       this.hideOnAdd = this.hideOnAdd || this.options.hideOnAdd || false;
       this.views = {};
       this.selected = false;
@@ -42,8 +42,6 @@
       if (_.isFunction(this.init)) {
         this.init.apply(this, arguments);
       }
-
-      this.bind('select', this.selectView);
     },
 
     // ### "Internal" methods
@@ -60,15 +58,26 @@
     },
 
     // Distributes `select` event to correct view. Will trigger `unselect` event
-    // to any currently selected view
-    selectView: function (name) {
+    // to any currently selected view. One argument will be sliced off and the
+    // rest will be passed to the selected view
+    select: function (name) {
+      this.trigger('select', name);
+      var args = _.toArray(arguments).slice(1);
+      args = args.length > 0 ? args : null;
+
       if (this.selected && this.selected !== name) {
         this.views[this.selected].trigger('unselect');
         this.selected = false;
       }
-      if (name && name in this.views && this.selected !== name) {
+      if (name && name in this.views) {
         this.selected = name;
-        this.views[this.selected].trigger('select');
+        var ctx = this.views[this.selected];
+        if (_.isFunction(ctx.select)) {
+          ctx.select.apply(ctx, args);
+        }
+        else {
+          ctx.trigger('select', args);
+        }
       }
       return this;
     },
@@ -158,9 +167,6 @@
       this.bind('select', this.setView);
 
       ns.ContainerView.prototype.initialize.apply(this, arguments);
-
-      // Manually unbind `selectView` since we will call it manually
-      this.unbind('select', this.selectView);
     },
 
     // Displays a view with the specified `name`. Throws an exception if the view
@@ -174,10 +180,10 @@
         this.views[name].el.show();
         this.views[name].trigger('show');
 
-        this.selectView(name);
+        this.selected = name;
         this.trigger('change', name);
       }
-      else {
+      else if (name) {
         throw 'View not found: ' + name;
       }
       return this;
