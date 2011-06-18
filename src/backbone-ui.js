@@ -65,7 +65,7 @@
       var args = _.toArray(arguments).slice(1);
       args = args.length > 0 ? args : null;
 
-      if (this.selected && this.selected !== name) {
+      if (name && this.selected && this.selected !== name) {
         this.views[this.selected].trigger('unselect');
         this.selected = false;
       }
@@ -312,6 +312,42 @@
         }
       }
       return this;
+    }
+  });
+
+  // Offers functionality to paginate over a collection
+  ns.PaginatedView = Backbone.View.extend({
+    initialize: function () {
+      _.bindAll(this, 'nextPage', 'prevPage', '_update');
+      this.pageSize = 10;
+      this.page = 0;
+      this.length = 0;
+      if (_.isFunction(this.init)) {
+        this.init.apply(this, arguments);
+      }
+    },
+    paginate: function (collection) {
+      var start = this.page * this.pageSize;
+      var end = ((this.page + 1) * this.pageSize) - 1;
+      this.length = collection.length;
+      return collection.slice(start, end);
+    },
+    nextPage: function () {
+      if ((this.page + 1) * this.pageSize < this.length) {
+        this.page++;
+        this.render();
+      }
+    },
+
+    prevPage: function () {
+      if ((this.page - 1) * this.pageSize > 0) {
+        this.page--;
+        this.render();
+      }
+    },
+
+    setPage: function () {
+      // TODO:
     }
   });
 }(jQuery, 'Backbone'));
