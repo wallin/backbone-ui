@@ -35,9 +35,32 @@
       _.bindAll(this,
                 'addView', 'removeSingle', 'removeView',
                 'getView', 'getTitle', 'select');
+      this.options = this.options || {};
       this.hideOnAdd = this.hideOnAdd || this.options.hideOnAdd || false;
       this.views = {};
       this.selected = false;
+
+      // Automatically try to find subviews using declarative syntax
+      var self = this;
+      if (this.options.populate === true) {
+        this.el.children('[data-bbui-id]').each(function (i, el) {
+          // Get type and try to find it
+          el = $(el);
+          var Type = el.data('bbui-type');
+          var id = el.data('bbui-id');
+          if (Type && id) {
+            try {
+              Type = eval(Type);
+            }
+            catch (err) {
+              Type = null;
+            }
+            if (Type) {
+              self.addView(id, new Type({el: el}));
+            }
+          }
+        });
+      }
 
       if (_.isFunction(this.init)) {
         this.init.apply(this, arguments);
@@ -340,7 +363,7 @@
     },
 
     prevPage: function () {
-      if ((this.page - 1) * this.pageSize > 0) {
+      if ((this.page - 1) * this.pageSize >= 0) {
         this.page--;
         this.render();
       }
