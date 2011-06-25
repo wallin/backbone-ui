@@ -36,14 +36,27 @@
                 'addView', 'removeSingle', 'removeView',
                 'getView', 'getTitle', 'select');
       this.options = this.options || {};
-      this.hideOnAdd = this.hideOnAdd || this.options.hideOnAdd || false;
       this.views = {};
       this.selected = false;
-
+      this.id = this.el.data('bbui-id') || false;
       // Automatically try to find subviews using declarative syntax
       var self = this;
       if (this.options.populate === true) {
-        this.el.children('[data-bbui-id]').each(function (i, el) {
+        // Find first level of views
+        var children = this.el
+          .find('[data-bbui-id]')
+          .first()
+          .nextAll('[data-bbui-id]')
+          .andSelf();
+
+        // Find nodes with parent explicitly set to this id
+        if (this.id) {
+          var more = this.el.find('[data-bbui-parent="' + this.id + '"]');
+          if (more) {
+            children = children.add(more);
+          }
+        }
+        children.each(function (i, el) {
           // Get type and try to find it
           el = $(el);
           var Type = el.data('bbui-type');
@@ -56,7 +69,10 @@
               Type = null;
             }
             if (Type) {
-              self.addView(id, new Type({el: el}));
+              self.addView(id, new Type({
+                el: el,
+                populate: true
+              }));
             }
           }
         });
@@ -120,9 +136,6 @@
       if (!(view.el instanceof $)) {
         view.el = $(view.el);
       }
-      if (this.hideOnAdd) {
-        view.el.hide();
-      }
 
       // Remove existing view with the same name
       if (this.views[name]) {
@@ -131,10 +144,15 @@
       this.views[name] = view;
 
       // Append view to container if nonexistant
-      if (view.id) {
+      if (view.el.length === 0) {
         var cls = opts.className || 'ui-view';
         this.el.append(view.el.addClass(cls));
       }
+
+      if (this.options.hideOnAdd) {
+        view.el.hide();
+      }
+
       return this;
     },
 
@@ -162,13 +180,13 @@
 
     // #### getTitle
     // Get title for a specific view name. If name is omitted current view will
-    // be used (if set). Title is fetched from the `data-view-title` attribute.
+    // be used (if set). Title is fetched from the `data-bbui-title` attribute.
     getTitle: function (name) {
       if (name == null && this.selected) {
         name = this.selected;
       }
       if (name in this.views) {
-        return this.views[name].el.data('view-title') || name;
+        return this.views[name].el.data('bbui-title') || name;
       }
       return '';
     }
@@ -185,7 +203,7 @@
     initialize: function () {
       _.bindAll(this, 'setView');
 
-      this.hideOnAdd = this.options.hideOnAdd || true;
+      this.options.hideOnAdd = this.options.hideOnAdd || true;
 
       this.bind('select', this.setView);
 
