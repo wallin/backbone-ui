@@ -360,12 +360,12 @@
   ns.PaginatedView = Backbone.View.extend({
     initialize: function () {
       _.bindAll(this, 'nextPage', 'prevPage', '_update');
-      this.pageSize = 10;
-      this.page = 0;
-      this.length = 0;
       if (_.isFunction(this.init)) {
         this.init.apply(this, arguments);
       }
+      this.pageSize = this.pageSize || 10;
+      this.page = 0;
+      this.length = 0;
     },
     paginate: function (collection) {
       var start = this.page * this.pageSize;
