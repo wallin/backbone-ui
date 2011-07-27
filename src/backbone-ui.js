@@ -359,7 +359,7 @@
   // Offers functionality to paginate over a collection
   ns.PaginatedView = Backbone.View.extend({
     initialize: function () {
-      _.bindAll(this, 'nextPage', 'prevPage', '_update');
+      _.bindAll(this, 'nextPage', 'prevPage');
       if (_.isFunction(this.init)) {
         this.init.apply(this, arguments);
       }
